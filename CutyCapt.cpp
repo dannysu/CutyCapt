@@ -300,6 +300,7 @@ CaptHelp(void) {
     "  --out=<path>                   The target file (.png|pdf|ps|svg|jpeg|...)   \n"
     "  --out-format=<f>               Like extension in --out, overrides heuristic \n"
 //  "  --out-quality=<int>            Output format quality from 1 to 100          \n"
+    "  --text-size-factor=<float>     Multiplier for text size (default: 1)        \n"
     "  --min-width=<int>              Minimal width for the image (default: 800)   \n"
     "  --min-height=<int>             Minimal height for the image (default: 600)  \n"
     "  --max-wait=<ms>                Don't wait more than (default: 90000, inf: 0)\n"
@@ -360,7 +361,9 @@ main(int argc, char *argv[]) {
   int argMinHeight = 600;
   int argMaxWait = 90000;
   int argVerbosity = 0;
-  
+
+  float argTextSizeFactor = 1;
+
   const char* argUrl = NULL;
   const char* argUserStyle = NULL;
   const char* argUserStylePath = NULL;
@@ -417,6 +420,12 @@ main(int argc, char *argv[]) {
     // --name=value options
     if (strncmp("--url", s, nlen) == 0) {
       argUrl = value;
+
+    } else if (strncmp("--text-size-factor", s, nlen) == 0) {
+      argTextSizeFactor = atof(value);
+      if (argTextSizeFactor <= 0) {
+        argTextSizeFactor = 1;
+      }
 
     } else if (strncmp("--min-width", s, nlen) == 0) {
       // TODO: add error checking here?
@@ -630,6 +639,7 @@ main(int argc, char *argv[]) {
   // is not currently possible (Qt 4.4.0) as far as I can tell.
   page.mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
   page.mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+  page.mainFrame()->setTextSizeMultiplier(argTextSizeFactor);
   page.setViewportSize( QSize(argMinWidth, argMinHeight) );
 
 #if CUTYCAPT_SCRIPT
