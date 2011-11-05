@@ -356,7 +356,6 @@ main(int argc, char *argv[]) {
 
   int argHelp = 0;
   int argDelay = 0;
-  int argSilent = 0;
   int argMinWidth = 800;
   int argMinHeight = 600;
   int argMaxWait = 90000;
@@ -390,11 +389,7 @@ main(int argc, char *argv[]) {
     const char* value;
 
     // boolean options
-    if (strcmp("--silent", s) == 0) {
-      argSilent = 1;
-      continue;
-
-    } else if (strcmp("--help", s) == 0) {
+    if (strcmp("--help", s) == 0) {
       argHelp = 1;
       break;
 
